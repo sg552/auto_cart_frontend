@@ -8,7 +8,6 @@
       require('coffee-script/register')
       $ = require('jquery')
       var gui = require('nw.gui')
-      url = 'http://outlet.lenovo.com/SEUILibrary/controller/e/outlet_us/LenovoPortal/en_US/catalog.workflow:keyword-search?acc=true&category-id=7FCAD587E909113E3FB719E59569CDAC&&results-mode=1&page-size=500';
       /*
       var new_win = gui.Window.get(
         window.open(url)
@@ -23,13 +22,17 @@
     <div id='target_site' style='width: 100%; height: 680px; border: 1px solid blue'></div>
   </body>
   <script>
-//    url = 'http://siwei.me'
+//    url = 'http://outlet.lenovo.com/SEUILibrary/controller/e/outlet_us/LenovoPortal/en_US/catalog.workflow:keyword-search?acc=true&category-id=7FCAD587E909113E3FB719E59569CDAC&&results-mode=1&page-size=500';
+    url = 'http://siwei.me'
 
     request = require('request')
     request(url, function(error, response, body){
-      if (!error && response.statusCode == 200 ) {
-        $('#target_site').html(body)
-      }
+      console.info('error:' + error)
+      console.info('response' + response.statusCode)
+      $('#target_site').html(body)
+      alert('now clicking..')
+      $('a')[4].click()
     })
+
   </script>
 </html>
