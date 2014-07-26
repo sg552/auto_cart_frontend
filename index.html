@@ -2,9 +2,22 @@
 <html>
   <head>
     <title>Hello World!</title>
+    <script>
+//      path = require('path');
+//      cc = require(path.join(process.cwd(), 'js/my.js'));
+      require('coffee-script/register');
+      require('jquery');
+//      require('./app.coffee');
+      //require('jquery/dist/jquery.js');
+      //require('./js/jquery.min.js');
+      a = $('head');
+    </script>
   </head>
   <body>
     <h1>Hello World!</h1>
     We are using node.js <script>document.write(process.version)</script>.
   </body>
+  <script>
+//    alert($('body'));
+  </script>
 </html>
