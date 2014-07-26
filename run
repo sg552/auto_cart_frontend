@@ -1,3 +1,3 @@
 rm app.nw
 zip app.nw . -r
-
+nw app.nw
