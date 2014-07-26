@@ -8,10 +8,34 @@
       require('coffee-script/register')
       $ = require('jquery')
       var gui = require('nw.gui')
+
+      request = require('request')
+      get_available_notebooks_url = 'http://siwei.me:3355/notebooks/available_notebooks'
+      request( get_available_notebooks_url, function(error, response, body){
+        urls_to_click = JSON.parse(body).result
+        console.info('error:' + error)
+        console.info('response' + response.statusCode)
+        console.info(' ==== ' + urls_to_click )
+        for (i = 0 ; i< urls_to_click.length; i++){
+          url = urls_to_click[i].url
+          console.info( 'i: ' + i + ': ' + url)
+          var new_win = gui.Window.get(
+            window.open(url)
+          )
+        }
+      })
+
       /*
-      var new_win = gui.Window.get(
-        window.open(url)
-      )
+      urls = ['http://outlet.lenovo.com/SEUILibrary/controller/e/outlet_us/LenovoPortal/en_US/config.workflow:ConfigureMtmAsItem?mtm-item=:000001BD:00012BF5:&action=addtocart',
+        'http://outlet.lenovo.com/SEUILibrary/controller/e/outlet_us/LenovoPortal/en_US/config.workflow:ConfigureMtmAsItem?mtm-item=:000001BD:00017117:&action=addtocart'
+      ]
+      for (i = 0 ; i< urls.length; i++){
+        url = urls[i]
+        console.info( 'i: ' + i + ': ' + urls[i])
+        var new_win = gui.Window.get(
+          window.open(urls[i])
+        )
+      }
       */
     </script>
   </head>
@@ -25,6 +49,7 @@
 //    url = 'http://outlet.lenovo.com/SEUILibrary/controller/e/outlet_us/LenovoPortal/en_US/catalog.workflow:keyword-search?acc=true&category-id=7FCAD587E909113E3FB719E59569CDAC&&results-mode=1&page-size=500';
     url = 'http://siwei.me'
 
+/*
     request = require('request')
     request(url, function(error, response, body){
       console.info('error:' + error)
@@ -33,6 +58,7 @@
       alert('now clicking..')
       $('a')[4].click()
     })
+*/
 
   </script>
 </html>
