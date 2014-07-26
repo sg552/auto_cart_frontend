@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Hello World!</title>
+    <script>
+      //require('./open_window.js')
+
+      var gui = require('nw.gui')
+      var tray = new gui.Tray({
+        title: '图标',
+        icon: 'tray.jpg'
+      })
+      var menu = new gui.Menu();
+      menu.append(new gui.MenuItem({
+        type: 'checkbox',
+        label: 'box1'
+      }));
+      tray.menu = menu;
+
+      tray.remove()
+      tray = null
+      /*
+      var win = gui.Window.get()
+      win.on('minimize', function(){
+        console.log('is minimized')
+      })
+      win.minimize()
+      win.removeAllListeners('minimize')
+      */
+
+      /*
+      url = 'http://outlet.lenovo.com/SEUILibrary/controller/e/outlet_us/LenovoPortal/en_US/catalog.workflow:keyword-search?acc=true&category-id=7FCAD587E909113E3FB719E59569CDAC&&results-mode=1&page-size=500';
+      var new_win = gui.Window.get(
+        window.open(url)
+      )
+      */
+      console.log(gui.App.argv);
+//      gui.App.quit();
+ //     gui.App.manifest.name
+    </script>
+  </head>
+  <body>
+  </body>
+  <script>
+  </script>
+</html>

@@ -6,6 +6,7 @@ node-webkit + jquery
 
 1. download & install node-webkit
 2. install npm (node)
+   $ install request/cheerio
 
 == Run
 

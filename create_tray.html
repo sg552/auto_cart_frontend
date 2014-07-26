@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Hello World!</title>
+    <script>
+      //require('./open_window.js')
+
+      var gui = require('nw.gui')
+      var tray = new gui.Tray({
+        title: '图标',
+        icon: 'tray.jpg'
+      })
+      var menu = new gui.Menu();
+      menu.append(new gui.MenuItem({
+        type: 'checkbox',
+        label: 'box1'
+      }));
+      tray.menu = menu;
+
+      /*
+      tray.remove()
+      tray = null
+      */
+      console.log(gui.App.argv);
+//      gui.App.quit();
+ //     gui.App.manifest.name
+    </script>
+  </head>
+  <body>
+  </body>
+  <script>
+  </script>
+</html>
