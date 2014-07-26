@@ -1,0 +1,17 @@
+=== Auto Cart
+
+node-webkit + jquery
+
+== Install
+
+1. download & install node-webkit
+2. install npm (node)
+
+== Run
+
+1. $ ./compile
+2. $ nw app.nw
+
+== About
+
+http://siwei.me
