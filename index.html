@@ -2,7 +2,7 @@
 <html>
   <head>
     <meta charset='utf-8'>
-    <title>获取页面</title>
+    <title>正在打开页面～</title>
     <script src=''></script>
     <script>
       require('coffee-script/register')
@@ -24,43 +24,13 @@
           )
         }
       })
-
-      /*
-      urls = ['http://outlet.lenovo.com/SEUILibrary/controller/e/outlet_us/LenovoPortal/en_US/config.workflow:ConfigureMtmAsItem?mtm-item=:000001BD:00012BF5:&action=addtocart',
-        'http://outlet.lenovo.com/SEUILibrary/controller/e/outlet_us/LenovoPortal/en_US/config.workflow:ConfigureMtmAsItem?mtm-item=:000001BD:00017117:&action=addtocart'
-      ]
-      for (i = 0 ; i< urls.length; i++){
-        url = urls[i]
-        console.info( 'i: ' + i + ': ' + urls[i])
-        var new_win = gui.Window.get(
-          window.open(urls[i])
-        )
-      }
-      */
     </script>
   </head>
   <body>
     <p>看看本次刷新抓来几个。。。（留意新弹窗)</p>
     <div>
     </div>
-    <!--
-    <div id='target_site' style='width: 100%; height: 680px; border: 1px solid blue'></div>
-    -->
+    <iframe src='http://siwei.me:3835' id='target_site'
+      style='width: 100%; height: 680px; border: 1px solid blue'></div>
   </body>
-  <script>
-//    url = 'http://outlet.lenovo.com/SEUILibrary/controller/e/outlet_us/LenovoPortal/en_US/catalog.workflow:keyword-search?acc=true&category-id=7FCAD587E909113E3FB719E59569CDAC&&results-mode=1&page-size=500';
-    url = 'http://siwei.me'
-
-/*
-    request = require('request')
-    request(url, function(error, response, body){
-      console.info('error:' + error)
-      console.info('response' + response.statusCode)
-      $('#target_site').html(body)
-      alert('now clicking..')
-      $('a')[4].click()
-    })
-*/
-
-  </script>
 </html>
