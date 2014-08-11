@@ -8,13 +8,21 @@
       require('coffee-script/register')
       $ = require('jquery')
       var gui = require('nw.gui')
-
       request = require('request')
+
       get_available_notebooks_url = 'http://siwei.me:3355/notebooks/available_notebooks'
+      lenovo_page = 'http://outlet.lenovo.com/SEUILibrary/controller/e/outlet_us/LenovoPortal/en_US/catalog.workflow:keyword-search?acc=true&category-id=7FCAD587E909113E3FB719E59569CDAC&&results-mode=1&page-size=500'
+      remote_server = 'http://siwei.me:3835'
+
+      request(lenovo_page, function(error, response, body){
+        console.info('== got content from lenove, now sending to remote server')
+        request.post(remote_server + '/notebook_filters/read_complete_content').form(
+          {html_content: body}
+        )
+      })
+
       request( get_available_notebooks_url, function(error, response, body){
         urls_to_click = JSON.parse(body).result
-        console.info('error:' + error)
-        console.info('response' + response.statusCode)
         console.info(' ==== ' + urls_to_click )
         for (i = 0 ; i< urls_to_click.length; i++){
           url = urls_to_click[i].url
