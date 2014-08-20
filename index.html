@@ -3,70 +3,66 @@
   <head>
     <meta charset='utf-8'>
     <title>正在打开页面～</title>
-    <script src=''></script>
     <script>
+      logger = function(message){
+        $('#message').append('<p>' +message+' </p>')
+      }
+
+
       require('coffee-script/register')
       $ = require('jquery')
       var gui = require('nw.gui')
       request = require('request')
+      sleep = require('sleep')
 
       remote_server = 'http://siwei.me:3835'
-
-      // 获取联想官方网站的内容
       // target_site_url = 'http://outlet.lenovo.com/SEUILibrary/controller/e/outlet_us/LenovoPortal/en_US/catalog.workflow:show-category-with-items?acc=true&category-id=7FCAD587E909113E3FB719E59569CDAC&&results-mode=1&page-size=500'
-      target_site_url = 'http://outlet.lenovo.com/SEUILibrary/controller/e/outlet_us/LenovoPortal/en_US/catalog.workflow:show-category-with-items?acc=true&category-id=7FCAD587E909113E3FB719E59569CDAC&&results-mode=1&page-size=500'
-      request( target_site_url, function(error, response, body){
-        console.info("==== got response")
-        request.post(
-            remote_server + '/notebook_filters/read_complete_content',
-            { form: { html_content: body } },
-            function (error, response, body) {
-              urls_to_click = JSON.parse(body).urls
-              console.info('error:' + error)
-              console.info('response' + body)
-              console.info(' ==== ' + urls_to_click )
-              for (i = 0 ; i< urls_to_click.length; i++){
-                url = urls_to_click[i]
-                console.info( 'i: ' + i + ': ' + url)
-                var new_win = gui.Window.get(
-                  window.open(url)
-                )
+      target_site_url = 'http://outlet.lenovo.com/SEUILibrary/controller/e/outlet_us/LenovoPortal/en_US/catalog.workflow:show-category-with-items?acc=true&category-id=7FCAD587E909113E3FB719E59569CDAC&&results-mode=1&page-size=50'
+      // 获取联想官方网站的内容
+      sleep_seconds_before_add_next_item = 20
+
+
+      read_from_target_site_and_send_to_backend_server = function(remote_server, target_site_url){
+        logger('远程的URL：<a href="' + target_site_url +'">'+ target_site_url +'</a>')
+        logger('每个点击加入购物车之前的时间间隔（秒）: ' + sleep_seconds_before_add_next_item)
+        console.info("=== now reading lenovo " )
+        logger('开始读取远程数据: ' + target_site_url)
+        request( target_site_url, function(error, response, body){
+          console.info("==== got response..")
+          logger('远程数据读取完毕.')
+          logger('开始分析。。。')
+
+          request.post( remote_server + '/notebook_filters/read_complete_content',
+              { form: { html_content: body } },
+              function (error, response, body) {
+                urls_to_click = JSON.parse(body).urls
+                console.info('response: ' + body)
+                console.info(' ==== ' + urls_to_click )
+                logger('分析完毕，需要模拟点击的链接：'+ urls_to_click)
+                for (i = 0 ; i< urls_to_click.length; i++){
+                  url = urls_to_click[i]
+                  console.info( 'i: ' + i + ': ' + url)
+                  var new_win = gui.Window.get( window.open(url))
+                  new_win.on('loaded', function(){
+                    console.info(new_win + ' loaded!')
+                  })
+                  sleep.sleep(sleep_seconds_before_add_next_item );
+                }
+                logger('所有的链接都点击完毕.')
               }
-            }
-        );
+          );
+        })
+      }
+
+      $(document).ready(function(){
+        read_from_target_site_and_send_to_backend_server(remote_server, target_site_url)
       })
-
-
-
-      // 获取远程返回的结果
-      /*
-      get_available_notebooks_url = 'http://siwei.me:3355/notebooks/available_notebooks'
-      lenovo_page = 'http://outlet.lenovo.com/SEUILibrary/controller/e/outlet_us/LenovoPortal/en_US/catalog.workflow:keyword-search?acc=true&category-id=7FCAD587E909113E3FB719E59569CDAC&&results-mode=1&page-size=500'
-      remote_server = 'http://siwei.me:3835'
-
-      request(lenovo_page, function(error, response, body){
-        console.info('== got content from lenove, now sending to remote server')
-        request.post(remote_server + '/notebook_filters/read_complete_content').form(
-          {html_content: body}
-        )
-      })
-
-      request( get_available_notebooks_url, function(error, response, body){
-        urls_to_click = JSON.parse(body).result
-        console.info(' ==== ' + urls_to_click )
-        for (i = 0 ; i< urls_to_click.length; i++){
-          url = urls_to_click[i].url
-          console.info( 'i: ' + i + ': ' + url)
-          var new_win = gui.Window.get(
-            window.open(url)
-          )
-        }
-      })
-      */
     </script>
   </head>
   <body>
     <p>看看本次刷新抓来几个。。。（留意新弹窗)</p>
+    <div id='message'>
+    </div>
     <div>
     </div>
     <iframe src='http://siwei.me:3835' id='target_site'
