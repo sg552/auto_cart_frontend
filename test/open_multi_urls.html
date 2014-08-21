@@ -1,0 +1,62 @@
+<html>
+  <head>
+    <script>
+logger = function(message){
+  $('#message').append('<p>' +message+' </p>')
+}
+
+$ = require('jquery')
+var gui = require('nw.gui')
+
+
+global.is_array_processed = []
+
+open_new_window = function(urls_to_click, index){
+  // init the processed array
+  if(global.is_array_processed.length == 0 ) {
+    logger('init the processed array')
+    for( i = 0; i < urls_to_click.length; i ++){
+      global.is_array_processed[i] = false
+    }
+    logger('array: ' + global.is_array_processed)
+  }
+
+  if(index + 1 > urls_to_click.length){
+    logger('index: ' + index + 'urls_to_click.length: ' + urls_to_click.length + ', ===finish')
+    return;
+  }
+
+  if(!global.is_array_processed[index]){
+    logger('== before switch, global.is_array_processed[index]: ' + global.is_array_processed[index] +', index:' + index)
+    global.is_array_processed[index] = true
+    logger('== after switch, global.is_array_processed[index]: ' + global.is_array_processed[index] +', index:' + index)
+    logger('=== opening ' + index + ', ' + urls_to_click[index])
+    var current_win = gui.Window.get( window.open(urls_to_click[index]))
+    current_win.on('loaded', function(){
+      logger('== loading done, now next...' + index)
+      open_new_window( urls_to_click, index + 1)
+    })
+  }else{
+    logger('== the index should be skipped to open( being opened ): ' + index)
+  }
+}
+
+urls_to_click = [
+//  'http://www.baidu.com',
+//  'http://siwei.me',
+//  'http://hanpeipei.com'
+"http://outlet.lenovo.com/SEUILibrary/controller/e/outlet_us/LenovoPortal/en_US/config.workflow:ConfigureMtmAsItem?mtm-item=:000001BD:0000F467:&action=addtocart",
+"http://outlet.lenovo.com/SEUILibrary/controller/e/outlet_us/LenovoPortal/en_US/config.workflow:ConfigureMtmAsItem?mtm-item=:000001BD:00012BF5:&action=addtocart"
+//"http://outlet.lenovo.com/SEUILibrary/controller/e/outlet_us/LenovoPortal/en_US/config.workflow:ConfigureMtmAsItem?mtm-item=:000001BD:0000C3FF:&action=addtocart"
+//"http://outlet.lenovo.com/SEUILibrary/controller/e/outlet_us/LenovoPortal/en_US/config.workflow:ConfigureMtmAsItem?mtm-item=:000001BD:0001081D:&action=addtocart",
+//"http://outlet.lenovo.com/SEUILibrary/controller/e/outlet_us/LenovoPortal/en_US/config.workflow:ConfigureMtmAsItem?mtm-item=:000001BD:000164E2:&action=addtocart",
+//"http://outlet.lenovo.com/SEUILibrary/controller/e/outlet_us/LenovoPortal/en_US/config.workflow:ConfigureMtmAsItem?mtm-item=:000001BD:00017452:&action=addtocart"
+]
+
+open_new_window(urls_to_click, 0 )
+    </script>
+  </head>
+  <body>
+    <div id='message'></div>
+  </body>
+</html>

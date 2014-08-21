@@ -66,14 +66,15 @@ read_from_target_site_and_send_to_backend_server = function(remote_server, targe
 }
 
 $(document).ready(function(){
-//  read_from_target_site_and_send_to_backend_server(remote_server, target_site_url)
+  read_from_target_site_and_send_to_backend_server(remote_server, target_site_url)
 })
     </script>
   </head>
   <body>
     <p>看看本次刷新抓来几个。。。（留意新弹窗)</p>
+    <!--
     <a href='test_open.html' target=_blank>test_open</a>
-    <a href='test/open_multi_urls.html' target=_blank>open_multi_urls</a>
+    -->
     <div id='message'>
     </div>
     <a href='http://siwei.me:3835'>编辑过滤条件</a>
