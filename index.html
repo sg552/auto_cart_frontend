@@ -21,7 +21,7 @@ target_site_url = 'http://outlet.lenovo.com/SEUILibrary/controller/e/outlet_us/L
 // 获取联想官方网站的内容
 sleep_seconds_before_add_next_item = 8
 
-
+/*
 open_new_window = function(urls_to_click, index){
   current_url = urls_to_click[index]
   next_url = urls_to_click[index + 1]
@@ -33,6 +33,7 @@ open_new_window = function(urls_to_click, index){
   }
 }
 
+*/
 read_from_target_site_and_send_to_backend_server = function(remote_server, target_site_url){
   logger('远程的URL：<a href="' + target_site_url +'">'+ target_site_url +'</a>')
   logger('每个点击加入购物车之前的时间间隔（秒）: ' + sleep_seconds_before_add_next_item)
@@ -50,15 +51,17 @@ read_from_target_site_and_send_to_backend_server = function(remote_server, targe
           console.info('response: ' + body)
           console.info(' ==== ' + urls_to_click )
           logger('分析完毕，')
-          $('iframe').before('<div id="buttons"></p>')
+          $('iframe').before('<div id="buttons"></div>')
           for (i = 0 ; i< urls_to_click.length; i++){
-            open_new_window(urls_to_click, i )
+            $('#buttons').append('<a href="'+ urls_to_click[i] + '" target="_blank">'+ urls_to_click[i] + '</a><br/>')
+ //           console.info("===== opening: " + urls_to_click[i])
+//            gui.Window.get( window.open(urls_to_click[i]))
+            url = urls_to_click[i]
+            var new_win = gui.Window.get( window.open(url))
           }
-          /*
           for(i = 0; i< urls_to_click.length; i++) {
             $('#buttons a')[i].click()
           }
-          */
           logger('所有的链接都点击完毕.')
         }
     );
@@ -66,7 +69,7 @@ read_from_target_site_and_send_to_backend_server = function(remote_server, targe
 }
 
 $(document).ready(function(){
-//  read_from_target_site_and_send_to_backend_server(remote_server, target_site_url)
+  read_from_target_site_and_send_to_backend_server(remote_server, target_site_url)
 })
     </script>
   </head>
