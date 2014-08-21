@@ -19,7 +19,7 @@
       // target_site_url = 'http://outlet.lenovo.com/SEUILibrary/controller/e/outlet_us/LenovoPortal/en_US/catalog.workflow:show-category-with-items?acc=true&category-id=7FCAD587E909113E3FB719E59569CDAC&&results-mode=1&page-size=500'
       target_site_url = 'http://outlet.lenovo.com/SEUILibrary/controller/e/outlet_us/LenovoPortal/en_US/catalog.workflow:show-category-with-items?acc=true&category-id=7FCAD587E909113E3FB719E59569CDAC&&results-mode=1&page-size=50'
       // 获取联想官方网站的内容
-      sleep_seconds_before_add_next_item = 20
+      sleep_seconds_before_add_next_item = 3
 
 
       read_from_target_site_and_send_to_backend_server = function(remote_server, target_site_url){
@@ -39,19 +39,27 @@
                 console.info('response: ' + body)
                 console.info(' ==== ' + urls_to_click )
                 logger('分析完毕，需要模拟点击的链接：'+ urls_to_click)
-                for (i = 0 ; i< urls_to_click.length; i++){
-                  url = urls_to_click[i]
-                  console.info( 'i: ' + i + ': ' + url)
-                  var new_win = gui.Window.get( window.open(url))
-                  new_win.on('loaded', function(){
-                    console.info(new_win + ' loaded!')
-                  })
-                  sleep.sleep(sleep_seconds_before_add_next_item );
-                }
-                logger('所有的链接都点击完毕.')
+                return urls_to_click
               }
           );
         })
+      }
+
+      add_button_to_current_page = function(urls_to_click){
+        $('iframe').before('<div id="buttons"></p>')
+        for (i = 0 ; i< urls_to_click.length; i++){
+          url = urls_to_click[i]
+          console.info( 'i: ' + i + ': ' + url)
+          $('#buttons').append('<a href="' + url + '">' + url +'</a>')
+          /*
+          var new_win = gui.Window.get( window.open(url))
+          new_win.on('loaded', function(){
+            console.info(new_win + ' loaded!')
+          })
+          sleep.sleep(sleep_seconds_before_add_next_item );
+          */
+        }
+        logger('所有的链接都点击完毕.')
       }
 
       $(document).ready(function(){
