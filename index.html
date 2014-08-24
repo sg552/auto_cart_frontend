@@ -13,7 +13,6 @@ $ = require('jquery')
 var gui = require('nw.gui')
 request = require('request')
 sleep = require('sleep')
-open = require('open')
 
 remote_server = 'http://siwei.me:3835'
 // target_site_url = 'http://outlet.lenovo.com/SEUILibrary/controller/e/outlet_us/LenovoPortal/en_US/catalog.workflow:show-category-with-items?acc=true&category-id=7FCAD587E909113E3FB719E59569CDAC&&results-mode=1&page-size=500'
@@ -52,15 +51,12 @@ read_from_target_site_and_send_to_backend_server = function(remote_server, targe
           console.info(' ==== ' + urls_to_click )
           logger('分析完毕，')
           $('iframe').before('<div id="buttons"></div>')
+          console.info( urls_to_click.length)
           for (i = 0 ; i< urls_to_click.length; i++){
-            $('#buttons').append('<a href="'+ urls_to_click[i] + '" target="_blank">'+ urls_to_click[i] + '</a><br/>')
- //           console.info("===== opening: " + urls_to_click[i])
-//            gui.Window.get( window.open(urls_to_click[i]))
             url = urls_to_click[i]
-            var new_win = gui.Window.get( window.open(url))
-          }
-          for(i = 0; i< urls_to_click.length; i++) {
-            $('#buttons a')[i].click()
+            $('#buttons').append('<a href="'+ url + '" target="_blank">'+ url + '</a><br/>')
+            console.info("===== opening: " + url)
+            gui.Window.get( window.open(url))
           }
           logger('所有的链接都点击完毕.')
         }
