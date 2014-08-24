@@ -1,13 +1,13 @@
 <html>
   <head>
     <script>
+
 logger = function(message){
   $('#message').append('<p>' +message+' </p>')
 }
 
 $ = require('jquery')
 var gui = require('nw.gui')
-
 
 global.is_array_processed = []
 

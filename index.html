@@ -3,6 +3,7 @@
   <head>
     <meta charset='utf-8'>
     <title>正在打开页面～</title>
+    <script type="text/javascript" src="yourfile.js"></script>
     <script>
 logger = function(message){
   $('#message').append('<p>' +message+' </p>')
@@ -20,19 +21,42 @@ target_site_url = 'http://outlet.lenovo.com/SEUILibrary/controller/e/outlet_us/L
 // 获取联想官方网站的内容
 sleep_seconds_before_add_next_item = 8
 
-/*
+// ----------------------- 定义 顺序打开窗口的方法
+
+global.is_array_processed = []
+
 open_new_window = function(urls_to_click, index){
-  current_url = urls_to_click[index]
-  next_url = urls_to_click[index + 1]
-  var current_win = gui.Window.get( window.open(current_url))
-  if(index + 1 <= urls_to_click.length){
+  // init the processed array
+  if(global.is_array_processed.length == 0 ) {
+    logger('init the processed array')
+    for( i = 0; i < urls_to_click.length; i ++){
+      global.is_array_processed[i] = false
+    }
+    logger('array: ' + global.is_array_processed)
+  }
+
+  if(index + 1 > urls_to_click.length){
+    logger('index: ' + index + 'urls_to_click.length: ' + urls_to_click.length + ', ===finish')
+    return;
+  }
+
+  if(!global.is_array_processed[index]){
+    logger('== before switch, global.is_array_processed[index]: ' + global.is_array_processed[index] +', index:' + index)
+    global.is_array_processed[index] = true
+    logger('== after switch, global.is_array_processed[index]: ' + global.is_array_processed[index] +', index:' + index)
+    logger('=== opening ' + index + ', ' + urls_to_click[index])
+    var current_win = gui.Window.get( window.open(urls_to_click[index]))
     current_win.on('loaded', function(){
+      logger('== loading done, now next...' + index)
       open_new_window( urls_to_click, index + 1)
     })
+  }else{
+    logger('== the index should be skipped to open( being opened ): ' + index)
   }
 }
 
-*/
+
+// -------------------  获取远程服务器内容
 read_from_target_site_and_send_to_backend_server = function(remote_server, target_site_url){
   logger('远程的URL：<a href="' + target_site_url +'">'+ target_site_url +'</a>')
   logger('每个点击加入购物车之前的时间间隔（秒）: ' + sleep_seconds_before_add_next_item)
@@ -56,28 +80,35 @@ read_from_target_site_and_send_to_backend_server = function(remote_server, targe
             url = urls_to_click[i]
             $('#buttons').append('<a href="'+ url + '" target="_blank">'+ url + '</a><br/>')
             console.info("===== opening: " + url)
-            gui.Window.get( window.open(url))
+//            gui.Window.get( window.open(url))
           }
-          logger('所有的链接都点击完毕.')
+          open_new_window(urls_to_click, 0 )
         }
     );
   })
 }
 
+
+// ===========   开始调用
 $(document).ready(function(){
-  read_from_target_site_and_send_to_backend_server(remote_server, target_site_url)
+  setTimeout(
+    read_from_target_site_and_send_to_backend_server(remote_server, target_site_url),
+    (15 * 60 * 1000)
+  )
 })
     </script>
   </head>
   <body>
     <p>看看本次刷新抓来几个。。。（留意新弹窗)</p>
+    <!--
     <a href='test_open.html' target=_blank>test_open</a>
     <a href='test/open_multi_urls.html' target=_blank>open_multi_urls</a>
+    -->
     <div id='message'>
     </div>
     <a href='http://siwei.me:3835'>编辑过滤条件</a>
     <iframe src='http://siwei.me:3835' id='target_site'
-      style='width: 100%; height: 380px; border: 1px solid blue'>
+      style='width: 100%; height: 80px; border: 1px solid blue'>
     </iframe>
     <!-- 目的是提前加载 联想官网对应的CSS， JS -->
     <iframe src='http://outlet.lenovo.com/SEUILibrary/controller/e/outlet_us/LenovoPortal/en_US/catalog.workflow:show-category-with-items?acc=true&category-id=7FCAD587E909113E3FB719E59569CDAC&&results-mode=1&page-size=50' id='lenovo_site'
