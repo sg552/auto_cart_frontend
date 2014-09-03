@@ -2,7 +2,7 @@
 <html>
   <head>
     <meta charset='utf-8'>
-    <title>正在打开页面～</title>
+    <title>欢迎使用宇辉小助手～～</title>
     <script type="text/javascript" src="yourfile.js"></script>
     <script>
 logger = function(message){
@@ -16,10 +16,9 @@ request = require('request')
 sleep = require('sleep')
 
 remote_server = 'http://siwei.me:3835'
+//remote_server = 'http://localhost:3333'
 // target_site_url = 'http://outlet.lenovo.com/SEUILibrary/controller/e/outlet_us/LenovoPortal/en_US/catalog.workflow:show-category-with-items?acc=true&category-id=7FCAD587E909113E3FB719E59569CDAC&&results-mode=1&page-size=500'
-target_site_url = 'http://outlet.lenovo.com/SEUILibrary/controller/e/outlet_us/LenovoPortal/en_US/catalog.workflow:show-category-with-items?acc=true&category-id=7FCAD587E909113E3FB719E59569CDAC&&results-mode=1&page-size=50'
-// 获取联想官方网站的内容
-sleep_seconds_before_add_next_item = 8
+target_site_url = 'http://outlet.lenovo.com/SEUILibrary/controller/e/outlet_us/LenovoPortal/en_US/catalog.workflow:show-category-with-items?acc=true&category-id=7FCAD587E909113E3FB719E59569CDAC&&results-mode=1&page-size=500'
 
 // ----------------------- 定义 顺序打开窗口的方法
 
@@ -59,13 +58,10 @@ open_new_window = function(urls_to_click, index){
 // -------------------  获取远程服务器内容
 read_from_target_site_and_send_to_backend_server = function(remote_server, target_site_url){
   logger('远程的URL：<a href="' + target_site_url +'">'+ target_site_url +'</a>')
-  logger('每个点击加入购物车之前的时间间隔（秒）: ' + sleep_seconds_before_add_next_item)
-  console.info("=== now reading lenovo " )
   logger('开始读取远程数据: <a href="' + target_site_url + '" target=_blank>' + target_site_url + '</a>')
   request( target_site_url, function(error, response, body){
-    console.info("==== got response..")
     logger('远程数据读取完毕.')
-    logger('开始分析。。。')
+    logger('开始在后台进行分析。。。')
 
     request.post( remote_server + '/notebook_filters/read_complete_content',
         { form: { html_content: body } },
@@ -73,14 +69,13 @@ read_from_target_site_and_send_to_backend_server = function(remote_server, targe
           urls_to_click = JSON.parse(body).urls
           console.info('response: ' + body)
           console.info(' ==== ' + urls_to_click )
-          logger('分析完毕，')
+          logger('分析完毕，列出所有需要点击的购物车URL:(供调试使用）')
           $('iframe').before('<div id="buttons"></div>')
           console.info( urls_to_click.length)
           for (i = 0 ; i< urls_to_click.length; i++){
             url = urls_to_click[i]
             $('#buttons').append('<a href="'+ url + '" target="_blank">'+ url + '</a><br/>')
-            console.info("===== opening: " + url)
-//            gui.Window.get( window.open(url))
+            console.info("===== 正在打开: " + url)
           }
           open_new_window(urls_to_click, 0 )
         }
@@ -89,12 +84,13 @@ read_from_target_site_and_send_to_backend_server = function(remote_server, targe
 }
 
 
+
 // ===========   开始调用
 $(document).ready(function(){
-  setTimeout(
-    read_from_target_site_and_send_to_backend_server(remote_server, target_site_url),
-    (15 * 60 * 1000)
-  )
+  setInterval( function(){
+    global.is_array_processed = []
+    read_from_target_site_and_send_to_backend_server(remote_server, target_site_url)
+  }, (20 * 60 * 1000))
 })
     </script>
   </head>
@@ -104,13 +100,15 @@ $(document).ready(function(){
     <a href='test_open.html' target=_blank>test_open</a>
     <a href='test/open_multi_urls.html' target=_blank>open_multi_urls</a>
     -->
-    <div id='message'>
+    <p>下面部分是调试信息</p>
+    <div id='message' style='border: 1px solid grey'>
     </div>
-    <a href='http://siwei.me:3835'>编辑过滤条件</a>
+    <a href='http://siwei.me:3835' target='_blank'>编辑过滤条件</a>
     <iframe src='http://siwei.me:3835' id='target_site'
       style='width: 100%; height: 80px; border: 1px solid blue'>
     </iframe>
     <!-- 目的是提前加载 联想官网对应的CSS， JS -->
+    <p> 下面这个东东可以忽略，目的是提前加载 联想官网对应的CSS， JS </p>
     <iframe src='http://outlet.lenovo.com/SEUILibrary/controller/e/outlet_us/LenovoPortal/en_US/catalog.workflow:show-category-with-items?acc=true&category-id=7FCAD587E909113E3FB719E59569CDAC&&results-mode=1&page-size=50' id='lenovo_site'
       style='width: 100%; height: 80px; border: 1px solid red'>
     </iframe>
