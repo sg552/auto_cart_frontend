@@ -87,6 +87,9 @@ read_from_target_site_and_send_to_backend_server = function(remote_server, targe
 
 // ===========   开始调用
 $(document).ready(function(){
+  global.is_array_processed = []
+  read_from_target_site_and_send_to_backend_server(remote_server, target_site_url)
+
   setInterval( function(){
     global.is_array_processed = []
     read_from_target_site_and_send_to_backend_server(remote_server, target_site_url)
